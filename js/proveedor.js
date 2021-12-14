@@ -50,15 +50,66 @@ class Abb{
     }    
 
     preorder(temp) {
-        if (temp != null) {
-            console.log(temp.obj)
-            this.preorder(temp.izq)
-            this.preorder(temp.der)
+            if (temp != null) {
+                console.log(temp.obj)
+                this.preorder(temp.izq)
+                this.preorder(temp.der)
+            }
         }
+    
+    inorden(temp){
+        if (temp != null){
+            this.inorden(temp.izq)
+            console.log(temp.obj)
+            this.inorden(temp.der)
+        }
+    }
+
+    postorden(temp){
+        if (temp != null){
+            this.postorden(temp.izq)
+            this.postorden(temp.der)
+            console.log(temp.obj)
+        }
+    }
+    
+    genDot(){
+        let cadena = "digraph abb {\n"
+        cadena += this.genNodos(this.raiz)
+        cadena += "\n"+this.enlazar(this.raiz)
+        cadena += '}'
+
+        console.log(cadena)
+    }
+
+    genNodos(raiz_actual){
+        let nodos = ""
+        if(raiz_actual != null){
+            nodos += "n" + raiz_actual.obj + "[label = \"" +raiz_actual.obj+"\"]\n"
+            nodos += this.genNodos(raiz_actual.izq)
+            nodos += this.genNodos(raiz_actual.der)
+        }
+        return nodos
+    }
+
+    enlazar(raiz_actual){
+        let cadena = ''
+        if (raiz_actual != null){
+            cadena += this.enlazar(raiz_actual.izq)
+            if(raiz_actual.izq != null){
+                cadena += 'n' + raiz_actual.obj + '-> n' +raiz_actual.izq.obj+'\n'
+            }
+            if(raiz_actual.der != null){
+                cadena += 'n' + raiz_actual.obj + '-> n' +raiz_actual.der.obj+'\n'
+            }
+            cadena += this.enlazar(raiz_actual.der)
+        }
+        return cadena
+
     }
 }
 
-/* let abb = new Abb()
+let abb = new Abb()
 abb.insertar(25)
 abb.insertar(10)
 abb.insertar(5)
@@ -66,4 +117,10 @@ abb.insertar(20)
 abb.insertar(35)
 abb.insertar(30)
 abb.insertar(40)
-abb.preorder(abb.raiz) */
+abb.preorder(abb.raiz)
+console.log()
+abb.inorden(abb.raiz)
+console.log()
+abb.postorden(abb.raiz)
+
+abb.genDot()

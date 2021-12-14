@@ -26,10 +26,10 @@ class AVL{
     insertar_nodo(nuevo, raiz_actual){
         if(raiz_actual != null){ // entra si hay nodo  y esta lleno
             if (nuevo.obj.id < raiz_actual.obj.id){
-                raiz_actual.izq = this.insertar_nodo(nuevo, raiz_actual.izq) 
+                raiz_actual.izq = this.insertar_nodo(nuevo, raiz_actual.der) 
                 
                 if((this.altura(raiz_actual.izq)-this.altura(raiz_actual.der)) == 2){
-                    
+                    console.log('hola')
                     if(nuevo.obj.id < raiz_actual.izq.obj.id){
                         raiz_actual = this.srl(raiz_actual)
                         
@@ -101,6 +101,7 @@ class AVL{
         t2.izq = t1
         t1.altura = this.max(this.altura(t1.izq), this.altura(t1.der)) + 1
         t2.altura = this.max(this.altura(t2.der), t1.altura) + 1
+
         return t2
     }
 
@@ -110,12 +111,63 @@ class AVL{
     }
 
     preorder(temp) {
-            if (temp != null) {
-                console.log(temp.obj.id)
-                this.preorder(temp.izq)
-                this.preorder(temp.der)
-            }
+        if (temp != null) {
+            console.log(temp.obj.id)
+            this.preorder(temp.izq)
+            this.preorder(temp.der)
         }
+    }
+    
+    inorden(temp){
+        if (temp != null){
+            this.inorden(temp.izq)
+            console.log(temp.obj.id)
+            this.inorden(temp.der)
+        }
+    }
+
+    postorden(temp){
+        if (temp != null){
+            this.postorden(temp.izq)
+            this.postorden(temp.der)
+            console.log(temp.obj.id)
+        }
+    }
+
+    genDot(){
+        let cadena = "digraph abb {\n"
+        cadena += this.genNodos(this.raiz)
+        cadena += "\n"+this.enlazar(this.raiz)
+        cadena += '}'
+
+        console.log(cadena)
+    }
+
+    genNodos(raiz_actual){
+        let nodos = ""
+        if(raiz_actual != null){
+            nodos += "n" + raiz_actual.obj.id + "[label = \"" +raiz_actual.obj.id+"\"]\n"
+            nodos += this.genNodos(raiz_actual.izq)
+            nodos += this.genNodos(raiz_actual.der)
+        }
+        return nodos
+    }
+
+    enlazar(raiz_actual){
+        let cadena = ''
+        if (raiz_actual != null){
+            cadena += this.enlazar(raiz_actual.izq)
+            if(raiz_actual.izq != null){
+                cadena += 'n' + raiz_actual.obj.id + '-> n' +raiz_actual.izq.obj.id+'\n'
+            }
+            if(raiz_actual.der != null){
+                cadena += 'n' + raiz_actual.obj.id + '-> n' +raiz_actual.der.obj.id+'\n'
+            }
+            cadena += this.enlazar(raiz_actual.der)
+        }
+        return cadena
+
+    }
 }
 
 
@@ -133,12 +185,12 @@ class Empleado{
     
 }
 
-let empleado1 = new Empleado(5,"dsd","dsd","dsd","dsd","dsd")
+let empleado1 = new Empleado(25,"dsd","dsd","dsd","dsd","dsd")
 let empleado2 = new Empleado(10,"dsd","dsd","dsd","dsd","dsd")
-let empleado3 = new Empleado(20,"dsd","dsd","dsd","dsd","dsd")
-let empleado4 = new Empleado(25,"dsd","dsd","dsd","dsd","dsd")
-let empleado5 = new Empleado(30,"dsd","dsd","dsd","dsd","dsd")
-let empleado6 = new Empleado(35,"dsd","dsd","dsd","dsd","dsd")
+let empleado3 = new Empleado(5,"dsd","dsd","dsd","dsd","dsd")
+let empleado4 = new Empleado(20,"dsd","dsd","dsd","dsd","dsd")
+let empleado5 = new Empleado(35,"dsd","dsd","dsd","dsd","dsd")
+let empleado6 = new Empleado(30,"dsd","dsd","dsd","dsd","dsd")
 let empleado7 = new Empleado(40,"dsd","dsd","dsd","dsd","dsd")
 let avl = new AVL()
 avl.insertar(empleado1)
@@ -149,7 +201,12 @@ avl.insertar(empleado5)
 avl.insertar(empleado6)
 avl.insertar(empleado7)
 avl.preorder(avl.raiz)
+console.log('')
+avl.inorden(avl.raiz)
+console.log()
+avl.postorden(avl.raiz)
 
+avl.genDot()
 
 
 /* function ver(){
@@ -160,3 +217,7 @@ avl.preorder(avl.raiz)
     console.log(nombre)
     document.getElementById("edad").value = 18
 } */
+
+function pempledo(){
+    console.log('vista para el elmpleado')
+}
