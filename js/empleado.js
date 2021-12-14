@@ -1,4 +1,4 @@
-class Nodo{
+   class Nodo{
     constructor(obj){
         this.obj = obj
         this.izq = null
@@ -16,7 +16,7 @@ class AVL{
         let nuevo = new Nodo(obj)
         if (this.raiz == null){
             this.raiz = nuevo
-            console.log("alguito",this.raiz.obj.id)
+            console.log("Agrego raiz",this.raiz.obj.id)
         }else{
             this.insertar_nodo(nuevo, this.raiz)
 
@@ -26,7 +26,7 @@ class AVL{
     insertar_nodo(nuevo, raiz_actual){
         if(raiz_actual != null){ // entra si hay nodo  y esta lleno
             if (nuevo.obj.id < raiz_actual.obj.id){
-                raiz_actual.izq = this.insertar_nodo(nuevo, raiz_actual.der) 
+                raiz_actual.izq = this.insertar_nodo(nuevo, raiz_actual.izq) 
                 
                 if((this.altura(raiz_actual.izq)-this.altura(raiz_actual.der)) == 2){
                     console.log('hola')
@@ -50,14 +50,15 @@ class AVL{
             }else{
                 console.log("No se permiten valores repetidos")
                 
-            }     
+            }    
+            
             return raiz_actual
-        }else{
+        }else{          
             raiz_actual = nuevo
             var r = this.altura(raiz_actual.der)
             var l = this.altura(raiz_actual.izq)
             var m = this.max(r,l)
-            raiz_actual.altura = m + 1
+            raiz_actual.altura = m + 1 
             return raiz_actual
         }
 
@@ -199,7 +200,7 @@ avl.insertar(empleado3)
 avl.insertar(empleado4)
 avl.insertar(empleado5)
 avl.insertar(empleado6)
-avl.insertar(empleado7)
+avl.insertar(empleado7) 
 avl.preorder(avl.raiz)
 console.log('')
 avl.inorden(avl.raiz)
