@@ -35,4 +35,20 @@ class Lista_Cliente{
     }
 }
 
+function validar(){
+    var tb = document.getElementById("textb").value
+    let adminH = document.getElementById("admin").value
+    let pass = document.getElementById("pass").value
+    if(tb == 'admin' /* && adminH == 'Admin' && pass == 1234 */ ){
+        console.log('form admin',adminH)
+        
+
+        window.open('index.html','_self')
+        
+    }else if(2==+1){
+        console.log('form empleamdo')
+    }else{
+        alert("Usuario o contraña incorrecto")
+    }
+}
 

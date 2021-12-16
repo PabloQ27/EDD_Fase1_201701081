@@ -9,11 +9,17 @@
 </head>
 <body>
   <section class="form-register">
-    <h4>Login</h4>
-    <input class="controls" type="text" name="id" id="id" placeholder="Ingrese su id">
+    <h4  >Bienvenido</h4>
+    <input class="controls" type="text" name="admin" id="admin" placeholder="Ingrese su id">
     <input class="controls" type="password" name="pass" id="pass" placeholder="Ingrese su Contraseña">
-    <input class = 'botons'  type="submit" value="Entrar">
-    <p><a href="form.html">¿No tengo Cuenta?</a></p>
+    
+    <select class = 'controls' name="select" id='textb' >
+      <option id='empleado' value="empleado" selected>Empleado</option>
+      <option id='admin' value="admin">Administrador</option>
+    </select>
+
+    <button onclick=validar() class="botons">Entrar</button>
+    
   </section>
 
 <script src="js/cliente.js"></script>

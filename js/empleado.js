@@ -210,14 +210,14 @@ avl.postorden(avl.raiz)
 avl.genDot()
 
 
-/* function ver(){
+function ver(){
     console.log("abeer")
     let empleado1 = new Empleado(23,'roberto',44, 'correossss','passsss','liss')
     console.log(empleado1.nombre)
     let nombre = document.getElementById("nombre").value
     console.log(nombre)
     document.getElementById("edad").value = 18
-} */
+}
 
 function pempledo(){
     console.log('vista para el elmpleado')
