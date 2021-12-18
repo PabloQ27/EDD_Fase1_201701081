@@ -8,17 +8,30 @@
   <title>Formulario Registro</title>
 </head>
 <body>
+  
+  
+
+
   <section class="form-register">
-    <h4>Formulario Registro</h4>
+    <h4>Registro para empleado</h4>
     <input class="controls" type="text" name="id" id="id" placeholder="Ingrese su id">
     <input class="controls" type="text" name="nombre" id="nombre" placeholder="Ingrese su nombre">
     <input class="controls" type="edad" name="edad" id="edad" placeholder="Ingrese su edad">
     <input class="controls" type="email" name="correo" id="correo" placeholder="Ingrese su Correo">
     <input class="controls" type="password" name="pass" id="pass" placeholder="Ingrese su Contraseña">
-    <button onclick=ver() class = 'botons' type="submit" >Registrar</button>
+    <button onclick=add_empleado() class = 'botons' type="submit" >Registrar</button>
+
+    <div class="custom-input-file col-md-6 col-sm-6 col-xs-6">
+      <input type="file" id="fichero-tarifas" class="input-file"  value="">
+      Subir fichero...
+    </div>
+
+    <button onclick=des() class = 'botons' type="submit" >Registrar</button>
     
   </section>
 
 <script src="js/empleado.js"></script>
+
+
 </body>
 </html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Formulario Registro</title>
+</head>
+<body>
+  
+  
+
+
+  <section class="form-register">
+    <h4 id = "titulo">Registro para cliente</h4>
+    <select id="combobox" >
+      <option >Seleccione Empleado</option>
+    </select>
+
+    <input class="controls" type="text" name="id" id="id" placeholder="Ingrese su id">
+    <input class="controls" type="text" name="nombre" id="nombre" placeholder="Ingrese su nombre">
+    <input class="controls" type="email" name="correo" id="correo" placeholder="Ingrese su edad">
+    <button onclick=add_cliente() class = 'botons' type="submit" >Registrar</button>
+
+    
+  </section>
+<script src="js/circular-json.js"></script>
+<script src="js/cliente.js"></script>
+<script src="js/empleado.js"></script>
+
+
+</body>
+</html>

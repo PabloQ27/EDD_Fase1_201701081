@@ -159,28 +159,4 @@ li:hover {
 
 
 
-  .menud{
-	list-style: none;
-	padding: 0;
-	background: #092327;
-	width: 100%;
-	max-width: 2000px;
-	margin: auto;
-	font-family: arial, helvetica;
-}
-
-.menud li a{
-	text-decoration: none;
-	color: white;
-	padding: 0px;
-	display: block;
-}
-
-.menud li{
-	display: inline-block;
-	text-align: center;
-}
-
-.menud li a:hover{
-	background: #145c5c;
-}
+  
