@@ -10,18 +10,20 @@
 <body>
   <section class="form-register">
     <h4  >Bienvenido</h4>
-    <input class="controls" type="text" name="admin" id="admin" placeholder="Ingrese su id">
+    <input class="controls" type="text" name="admin" id="id" placeholder="Ingrese su id">
     <input class="controls" type="password" name="pass" id="pass" placeholder="Ingrese su Contraseña">
     
     <select class = 'controls' name="select" id='textb' >
-      <option id='empleado' value="empleado" selected>Empleado</option>
+      <option id='empleado' value="empleado" >Empleado</option>
       <option id='admin' value="admin">Administrador</option>
     </select>
 
     <button onclick=verificar() class="botons">Entrar</button>
     
   </section>
+
   <script src="js/empleado.js"></script>
+  <script src="js/circular-json.js"></script>
 
 </body>
 </html>

@@ -16,7 +16,7 @@ class AVL {
         let nuevo = new NodoAVL(obj)
         if (this.raiz == null) {
             this.raiz = nuevo
-            console.log("Agrego raiz", this.raiz.obj.id)
+            
         } else {
             this.insertar_nodo(nuevo, this.raiz)
 
@@ -211,33 +211,8 @@ avl.genDot() */
 
 
 
+// METODOS PARA HTML form_empleado
 
-
-
-function ver() {
-    let id = document.getElementById('id').value
-    let nombre = document.getElementById('nombre').value
-    let edad = document.getElementById('edad').value
-    let email = document.getElementById('correo').value
-    let pass = document.getElementById('pass').value
-    let empleado1 = new Empleado(id, nombre, edad, email, pass, 'liss')
-    console.log(empleado1.id)
-
-    localStorage.setItem('datos', JSON.stringify(empleado1))
-
-}
-
-function des() {
-    var guardado = localStorage.getItem('datos');
-    var insta = new Empleado()
-    Object.assign(insta, JSON.parse(guardado))
-    console.log('aber', insta.id)
-    //console.log('objetoObtenido: ', JSON.parse(guardado))
-
-}
-
-
-let avl = new AVL()
 function add_empleado() {
     let id = document.getElementById('id').value
     let nombre = document.getElementById('nombre').value
@@ -245,29 +220,97 @@ function add_empleado() {
     let email = document.getElementById('correo').value
     let pass = document.getElementById('pass').value
 
-    let empleado = new Empleado(id, nombre, edad, email, pass)
-    avl.insertar(empleado)
-    localStorage.setItem('datos', JSON.stringify(avl))
-    avl.genDot()
-}
-
-function verificar() {
-    var guardado = localStorage.getItem('datos');
+    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
     var avl = new AVL()
-    Object.assign(avl, JSON.parse(guardado))
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
 
-    //console.log('algo',avl.raiz.obj.id)
+    if(avl.raiz == null){
+        let nuevo_avl = new AVL()
+        let empleado = new Empleado(id, nombre, edad, email, pass)
+        nuevo_avl.insertar(empleado)
+        let avl_temp = CircularJSON.stringify(nuevo_avl)
+        localStorage.setItem('datos', JSON.stringify(avl_temp))
 
-    if (avl.raiz == null) {
-        console.log('raiz vacia')
-    } else {
+        console.log('lista de IDs Avl')
+        nuevo_avl.inorden(nuevo_avl.raiz)
+    }else{
+        //validar si el empleado no se repite
+        let empleado = new Empleado(id, nombre, edad, email, pass)
+        avl.insertar(empleado)
+
+        let avl_temp = CircularJSON.stringify(avl)
+        localStorage.setItem('datos', JSON.stringify(avl_temp))
+        //avl.genDot()
+        console.log('lista de IDs Avl')
         avl.inorden(avl.raiz)
-        console.log('recorrer la matriz pa mostrar el dato xd')
     }
 }
 
+function back(){
+    window.open("admin_empleados.html", "_self")
+}
+
+//  METODO PARA EL LOGIN
+function verificar() {
+    let tcombo = document.getElementById('textb').value
+    let id = document.getElementById('id').value
+    let pass = document.getElementById('pass').value
+
+    if (tcombo == 'admin'){
+        if(id == 'Admin' && pass == '1234'){
+            window.open("admin_empleados.html", "_self")
+        }else{
+            alert('Credenciales de administrador incorrectas')           
+        }
+    }else{
+        console.log('selecciono el empleado')
+        validar_emplado(id,pass)
+    }
+}
+
+function validar_emplado(id,pass){
+    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
+    var avl = new AVL()
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
+    console.log(avl)
+    if(avl.raiz == null){
+        alert('Sin usuarios')
+    }else{
+        console.log('revisar')
+        recorreIn(avl.raiz,id,pass)
+    }
+}
+
+function recorreIn(temp,id,pass){
+     
+    if (temp != null){     
+        this.recorreIn(temp.izq,id,pass)
+        if(temp.obj.id == id && temp.obj.password == pass){
+            console.log('lo encontro xd')
+            window.open("empleado_cliente.html", "_self")
+            let nId = temp.obj.id
+            let nPass = temp.obj.password
+            localStorage.setItem('claveID', nId)
+            localStorage.setItem('clavePass',nPass)
+            
+        }
+        this.recorreIn(temp.der,id,pass)       
+    }
+    
+}
+
+function salir(){
+    window.open("login.html", "_self")
+}
+
+
+
+
 let combo = document.getElementById("combobox")
 let elementos = "<option> Seleccione Empleado </option>"
+
 function inordenT(temp){
 
     if (temp != null) {
@@ -279,11 +322,24 @@ function inordenT(temp){
     }
 }
 
+document.getElementById("fichero").addEventListener("change", function() {
+    var file_to_read = document.getElementById("fichero").files[0];
+    var fileread = new FileReader();
+    fileread.onload = function(e) {
+      var content = e.target.result;
+      var intern = JSON.parse(content); // parse json 
+      console.log(intern.vendedores[0]["id"]); // You can index every object
+    };
+    fileread.readAsText(file_to_read);
+  });
+
+
 function mostrarAVL(){
     console.log("para txbox")
-    var guardado = localStorage.getItem('datos');
+    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
     var avl = new AVL()
-    Object.assign(avl, JSON.parse(guardado))
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
     inordenT(avl.raiz)
     
     

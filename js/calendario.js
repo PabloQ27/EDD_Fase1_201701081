@@ -1,3 +1,32 @@
+class NodoMes{
+    constructor(mes){
+        this.mes = mes
+        this.sig = null
+        this.ant = null
+        this.matriz = null
+    }
+}
+
+class Lista_Mes{
+    constructor(){
+        this.cabeza = null
+    }
+
+    add(obj){
+        console.log('agregando')
+        let nuevo = new NodoMes(obj)
+        if (this.cabeza == null){
+            this.cabeza = nuevo
+        }else{
+            let temp = this.cabeza
+            while (temp.siguiente != null){               
+                temp = temp.siguiente
+            }
+            temp.siguiente = nuevo
+            nuevo.anterior = temp
+        }
+    }
+}
 class Calendario {
     constructor(hora, dia, mes, evento) {
         this.hora = hora
@@ -26,10 +55,6 @@ class Lista1 {
         let nuevo = new Nodo1(index)
         if (this.cabeza == null) {   
             let dias = new Lista2()   
-            let c2 = new Calendario(10, 3, "julio", "boda")
-            let c3 = new Calendario(15, 4, "julio", "boda")
-            dias.add2(c2)
-            dias.add2(c3)
             dias.add2(obj)  
             this.cabeza = nuevo
             nuevo.der = dias
@@ -158,29 +183,44 @@ class Lista2 {
     }
 }
 
-/* 
-let e1 = new Calendario(1,3,"","")
-let e2 = new Calendario(1,10,"","")
-let e3 = new Calendario(1,15,"","")
-let e4 = new Calendario(1,13,"","")
-let e5 = new Calendario(1,5,"","")
-let e6 = new Calendario(1,2,"","")
-let e7 = new Calendario(1,18,"","")
- */
-
+//Lista1 es la matriz para calendario
 let cal = new Lista1()
 let c1 = new Calendario(3, 5, "julio", "boda")
-let c2 = new Calendario(10, 2, "julio", "boda")
-let c3 = new Calendario(15, 2, "julio", "boda")
+let c2 = new Calendario(10, 2, "agosto", "boda")
+let c3 = new Calendario(15, 2, "semptiembre", "boda")
 let c4 = new Calendario(13, 2, "julio", "boda")
 let c5 = new Calendario(3, 23, "julio", "boda")
 let c6 = new Calendario(3, 2, "julio", "boda")
 let c7 = new Calendario(3, 2, "julio", "boda")
-cal.add(c1.hora, c1)
+/* cal.add(c1.hora, c1)
 cal.add(c2.hora, c2)
 cal.add(c3.hora, c3)
 cal.add(c4.hora, c4)
 cal.add(c5.hora, c5)
 cal.add(c6.hora, c6)
 cal.add(c7.hora, c7)
-cal.ver()
+cal.ver() */
+let lista_meses = new Lista_Mes()
+function add_calendario(){
+    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
+    var avl = new AVL()
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
+    console.log(avl.raiz.obj.id)
+
+    lista_meses.add(c1.mes)
+    lista_meses.add(c2.mes)
+    lista_meses.add(c3.mes)
+    
+    cal.add(c1.hora, c1)
+    cal.add(c4.hora, c4)
+    cal.add(c5.hora, c5)
+
+    lista_meses.cabeza.matriz = cal
+
+    avl.raiz.obj.listaMeses = lista_meses
+
+    let avl_temp = CircularJSON.stringify(avl)
+    localStorage.setItem('datos', JSON.stringify(avl_temp))
+}
+
