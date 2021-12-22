@@ -1,32 +1,32 @@
-class Cliente{
-    constructor(id, nombre, correo){
+class Cliente {
+    constructor(id, nombre, correo) {
         this.id = id
         this.nombre = nombre
         this.correo = correo
     }
 }
 
-class Nodo{
-    constructor(obj){
+class Nodo {
+    constructor(obj) {
         this.obj = obj
         this.siguiente = null
         this.anterior = null
     }
 }
 
-class Lista_Cliente{
-    constructor(){
+class Lista_Cliente {
+    constructor() {
         this.cabeza = null
     }
 
-    insert(obj){
-        
+    insert(obj) {
+
         let nuevo = new Nodo(obj)
-        if (this.cabeza == null){
+        if (this.cabeza == null) {
             this.cabeza = nuevo
-        }else{
+        } else {
             let temp = this.cabeza
-            while (temp.siguiente != null){               
+            while (temp.siguiente != null) {
                 temp = temp.siguiente
             }
             temp.siguiente = nuevo
@@ -34,9 +34,9 @@ class Lista_Cliente{
         }
     }
 
-    ver(){
+    ver() {
         let temp = this.cabeza
-        while (temp != null){
+        while (temp != null) {
             console.log(temp.obj.nombre)
             temp = temp.siguiente
         }
@@ -57,128 +57,78 @@ listap.ver() */
 
 
 
-function validar(){
-    var tb = document.getElementById("textb").value
-    let adminH = document.getElementById("admin").value
-    let pass = document.getElementById("pass").value
-    if(tb == 'admin' /* && adminH == 'Admin' && pass == 1234 */ ){
-        console.log('form admin',adminH)
-        
-
-        window.open('admin_empleados.html','_self')
-        
-    }else if(2==+1){
-        console.log('form empleamdo')
-    }else{
-        alert("Usuario o contraña incorrecto")
-    }
-}
 
 
-let lista_cliente = new Lista_Cliente()
-function add_cliente(){
-    let val = document.getElementById("combobox").value
-    console.log(val)
 
-    // aqui se recupera el arbol serializado
-    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
+
+function add_cliente() {
+
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+    var avl = new AVL()
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
+
+    idTemp = localStorage.getItem("claveID")
+    passTemp = localStorage.getItem("clavePass")
+
+    console.log(idTemp, passTemp)
+    avl.inOrden(avl.raiz)
+    let id = document.getElementById('id').value
+    let nombre = document.getElementById('nombre').value
+    let correo = document.getElementById('correo').value
+    buscarid(avl.raiz, idTemp, id, nombre, correo, avl)
+    
+
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
     var avl = new AVL()
     guardado_temp = CircularJSON.parse(guardado_temp)
     Object.assign(avl, guardado_temp)
     console.log(avl)
 
-    let id = document.getElementById("id").value
-    let nombre = document.getElementById("nombre").value
-    let edad = document.getElementById("correo").value
-    let cliente = new Cliente(id,nombre,edad)
-    lista_cliente.insert(cliente)
-    
-
-
-    avl.raiz.obj.listaClientes = lista_cliente
-    console.log("list d la raiz",avl.raiz.obj.listaCliente)
-    
-
-    //aqui se serializa el arbol
-    let avl_temp = CircularJSON.stringify(avl)
-    localStorage.setItem('datos', JSON.stringify(avl_temp))
 }
 
 
+function buscarid(temp, id, id2, nombre, correo, avl) {
+    if (temp != null) {
+        buscarid(temp.izq, id, id2, nombre, correo, avl)
+        if (id == temp.obj.id) {
 
-function add_cliente2(){
-    let idguardado= localStorage.getItem('claveID')
-    let passguardado = localStorage.getItem('clavePass')
-    console.log("el id pa guardar",idguardado,passguardado)
+            let cliente = new Cliente(id2, nombre, correo)
+            temp.obj.listaClientes = agregarListaCliente(temp.obj.listaClientes, cliente)
+            console.log(temp.obj)
 
-    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
-    var avl2 = new AVL()
-    guardado_temp = CircularJSON.parse(guardado_temp)
-    Object.assign(avl2, guardado_temp)
-    
-    let id = document.getElementById("idc2").value
-    let nombre = document.getElementById("nombrec2").value
-    let correo = document.getElementById("correoc2").value
-    let cliente = new Cliente(id,nombre,correo)
+            let avl_temp = CircularJSON.stringify(avl)
+            localStorage.setItem('datos', JSON.stringify(avl_temp))
 
-    recorreIn2(avl2.raiz, idguardado, passguardado, cliente, avl2)
-
-}
-
-
-function recorreIn2(temp, id, pass, obj, avl){
-     
-    if (temp != null){     
-        this.recorreIn2(temp.izq, id, pass, obj, avl)
-        if(temp.obj.id == id && temp.obj.password == pass){
-            if(temp.obj.listaClientes == null){
-                let nueva = new Lista_Cliente()
-                nueva.insert(obj)
-                temp.obj.listaClientes = nueva
-               
-                let avl_temp = CircularJSON.stringify(avl)
-                localStorage.setItem('datos', JSON.stringify(avl_temp))
-            }else{
-                console.log(temp.obj.listaClientes)
-                temp.obj.listaClientes = ver3(temp.obj.listaClientes, obj)
-                
-                let avl_temp = CircularJSON.stringify(avl)
-                localStorage.setItem('datos', JSON.stringify(avl_temp))
-                //ver33(temp.obj.listaClientes.cabeza)
-            }         
+            return 1
         }
-        this.recorreIn2(temp.der, id, pass, obj, avl)       
-    } 
+        buscarid(temp.der, id, id2, nombre, correo, avl)
+    }
 }
 
-function ver3(listavieja,obj){
-    console.log("lista vieja")
-    let temp = listavieja.cabeza
-    while(temp != null){
-        console.log(temp.obj.nombre)
-        temp = temp.siguiente
+function agregarListaCliente(lista, cliente) {
+    if (lista == null) {
+        let nuevalista = new Lista_Cliente()    
+        nuevalista.insert(cliente)
+        lista = nuevalista
+        return lista
+    } else {
+        lista = cambio(lista, cliente)
+        return lista
     }
-    temp = listavieja.cabeza
-    console.log("cambio")
+}
+
+function cambio(listavieja, cliente){
+    let temp = listavieja.cabeza
     let listanueva = new Lista_Cliente()
-    
     while(temp != null){
         listanueva.insert(temp.obj)
-        console.log(temp.obj.nombre)
         temp = temp.siguiente
     }
-    listanueva.insert(obj)
-
-    console.log("nueva lista")
-    listanueva.ver(listanueva.cabeza)
+    listanueva.insert(cliente)
     return listanueva
-
 }
-function ver33(temp){
-    while(temp != null){
-        console.log(temp.obj.nombre)
-        temp = temp.siguiente
-    }
-    
 
-}
+
+//el id lo da el json al igual que el id2 solo hay que recuperar el avl para la carga masiva la cluea
+//sera con doble for

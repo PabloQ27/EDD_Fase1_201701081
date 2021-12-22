@@ -1,30 +1,28 @@
 <html>
 <head>
-<title>Grafica de Proveedor</title>    
+<title>Grafica de Empleados</title>    
    <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
     
 </head>
 <body>
-    <button onclick="bst()">mostrar</button>
+    <button onclick="avlg()">mostrar</button>
     <div id = "mynetwork"></div>
     <input type="checkbox" class="checkbox" id="check">
     <label class="menu" for="check">|||</label>
-    
     <div class="left-panel">
-        <ul>  
+    <ul>
         <a href="admin_empleados.html"><li>Empleados</li></a>  
         <a href="admin_proveedores.html"><li>Proveedores</li></a>    
         <a href=""><li>Cargar Calendario</li></a>
         <a href=""><li>Cargar Clientes</li></a>  
         <a href=""><li>Reportes General</li></a>  
-
-        <button onclick="" class ='botons' >Cerrar sesión</button>    
-        </ul>
+    <button onclick="salir()">Cerrar sesión</button>    
+    </ul>
     </div>
 
 <script  src="js/vis-network.min.js"></script>
-<script src="js/proveedor.js"></script>
-
+<script src="js/circular-json.js"></script>
+<script src="js/empleado.js"></script>
 </body>
 
 

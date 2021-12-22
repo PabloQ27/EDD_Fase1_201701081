@@ -1,173 +1,184 @@
-class NodoAVL {
+class nodoAVL {
     constructor(obj) {
-        this.obj = obj
-        this.izq = null
-        this.der = null
-        this.altura = 0
+        this.obj = obj;
+        this.izq = null;
+        this.der = null;
+        this.altura = 0;
     }
 }
 
 class AVL {
     constructor() {
-        this.raiz = null
+        this.raiz = null;
     }
 
     insertar(obj) {
-        let nuevo = new NodoAVL(obj)
+        let nuevo = new nodoAVL(obj);
         if (this.raiz == null) {
-            this.raiz = nuevo
-            
+            this.raiz = nuevo;
         } else {
-            this.insertar_nodo(nuevo, this.raiz)
-
+            this.raiz = this.insertar_nodo(this.raiz, nuevo);
         }
     }
 
-    insertar_nodo(nuevo, raiz_actual) {
-        if (raiz_actual != null) { // entra si hay nodo  y esta lleno
-            if (nuevo.obj.id < raiz_actual.obj.id) {
-                raiz_actual.izq = this.insertar_nodo(nuevo, raiz_actual.izq)
+    insertar_nodo(raiz_actual, nuevo) {
+        if (raiz_actual != null) {
+            //recorrer hijos
+            if (raiz_actual.obj.id > nuevo.obj.id) {
+                raiz_actual.izq = this.insertar_nodo(raiz_actual.izq, nuevo);
+                //validaciones
 
-                if ((this.altura(raiz_actual.izq) - this.altura(raiz_actual.der)) == 2) {
-                    console.log('hola')
-                    if (nuevo.obj.id < raiz_actual.izq.obj.id) {
-                        raiz_actual = this.srl(raiz_actual)
-
-                    } else {
-                        raiz_actual = this.drl(raiz_actual)
+                if (this.altura(raiz_actual.der) - this.altura(raiz_actual.izq) == -2) {
+                   // console.log("entra a rotacion IZQUIERDA");
+                    //if(this.altura(raiz_actual.izq.der)-this.altura(raiz_actual.izq.izq))
+                    if (nuevo.obj.id < raiz_actual.izq.obj.id) { //-1 ROTACION IZQUIERDA
+                      //  console.log("entra a rotacion IZQUIERDA IZQUIERDA");
+                        raiz_actual = this.r_izquierda(raiz_actual);
+                    } else { //1 ROTACION IZQ-DERECHA
+                      //  console.log("entra a rotacion IZQUIERDA DERECHA");
+                        raiz_actual = this.r_izq_der(raiz_actual);
                     }
                 }
-            } else if (nuevo.obj.id > raiz_actual.obj.id) {
-                raiz_actual.der = this.insertar_nodo(nuevo, raiz_actual.der)
-                if ((this.altura(raiz_actual.der) - this.altura(raiz_actual.izq)) == 2) {
-                    if (nuevo.obj.id > raiz_actual.der.obj.id) {
-                        raiz_actual = this.srr(raiz_actual)
-
-                    } else {
-                        raiz_actual = this.drr(raiz_actual)
+            } else if (raiz_actual.obj.id < nuevo.obj.id) {
+                raiz_actual.der = this.insertar_nodo(raiz_actual.der, nuevo);
+                //validaciones
+                if (this.altura(raiz_actual.der) - this.altura(raiz_actual.izq) == 2) {
+                 //   console.log("entra a rotacion DERECHA");
+                    if (nuevo.obj.id > raiz_actual.der.obj.id) { // 1 ROTACION DERECHA
+                       // console.log("entra a rotacion DERECHA DERECHA");
+                        raiz_actual = this.r_derecha(raiz_actual);
+                    } else {//-1 ROTACION DERECHA IZQUIERDA
+                      //  console.log("entra a rotacion DERECHA IZQUIERDA");
+                        raiz_actual = this.r_der_izq(raiz_actual);
                     }
                 }
+
             } else {
-                console.log("No se permiten valores repetidos")
-
+                console.log("NO SE PUEDE INSERTAR EL DATO PORQUE YA EXISTE");
             }
 
-            return raiz_actual
+            raiz_actual.altura = this.altura_maxima(this.altura(raiz_actual.der), this.altura(raiz_actual.izq)) + 1;
+            return raiz_actual;
         } else {
-            raiz_actual = nuevo
-            var r = this.altura(raiz_actual.der)
-            var l = this.altura(raiz_actual.izq)
-            var m = this.max(r, l)
-            raiz_actual.altura = m + 1
-            return raiz_actual
+            raiz_actual = nuevo;
+            return raiz_actual;
         }
-
     }
 
-    altura(raiz_actual) {
-        if (raiz_actual == null) {
-            return -1
+    altura(nodo) {
+        if (nodo != null) {
+            return nodo.altura;
         } else {
-            return raiz_actual.altura
+            return -1;
         }
     }
 
-    max(val1, val2) {
-        if (val1 > val2) {
-            return val1
+    altura_maxima(h1, h2) {
+        if (h2 >= h1) { //************************ MAYOR O IGUAL */
+            return h2;
         } else {
-            return val2
+            return h1;
         }
+
+    }
+    //ROTACIONES
+    //simple izquerda
+    r_izquierda(nodo) {
+        let aux = nodo.izq;
+        nodo.izq = aux.der;
+        aux.der = nodo;
+        nodo.altura = this.altura_maxima(this.altura(nodo.der), this.altura(nodo.izq)) + 1;
+        aux.altura = this.altura_maxima(nodo.altura.altura, this.altura(nodo.izq)) + 1;
+        return aux;
+    }
+    //simple derecha
+    r_derecha(nodo) {
+        let aux = nodo.der;
+        nodo.der = aux.izq;
+        aux.izq = nodo;
+        nodo.altura = this.altura_maxima(this.altura(nodo.izq), this.altura(nodo.der)) + 1;
+        aux.altura = this.altura_maxima(nodo.altura.altura, this.altura(nodo.der)) + 1;
+        return aux;
     }
 
-    srl(t1) {
-        var t2
-        t2 = t1.izq
-        t1.izq = t2.der
-        t2.der = t1
-        t1.altura = max(this.altura(t1.izq), this.altura(t1.der)) + 1
-        t2.altura = max(this.altura(t2.izq), t1.altura) + 1
-        return t2
+    //rotacion izq-der
+    r_izq_der(nodo) {
+        nodo.izq = this.r_derecha(nodo.izq);
+        let aux = this.r_izquierda(nodo);
+        return aux;
     }
 
-    drl(raiz_actual) {
-        raiz_actual.izq = this.srr(raiz_actual.izq)
-        return this.srl(raiz_actual)
+    //rotacion der-izq
+    r_der_izq(nodo) {
+        nodo.der = this.r_izquierda(nodo.der);
+        let aux = this.r_derecha(nodo);
+        return aux;
     }
 
-    srr(t1) {
-        var t2
-        t2 = t1.der
-        t1.der = t2.izq
-        t2.izq = t1
-        t1.altura = this.max(this.altura(t1.izq), this.altura(t1.der)) + 1
-        t2.altura = this.max(this.altura(t2.der), t1.altura) + 1
+    //****************************************************** */
 
-        return t2
-    }
-
-    drr(raiz_actual) {
-        raiz_actual.der = this.srl(raiz_actual.der)
-        return this.srr(raiz_actual)
-    }
-
-    preorder(temp) {
-        if (temp != null) {
-            console.log(temp.obj.id)
-            this.preorder(temp.izq)
-            this.preorder(temp.der)
-        }
-    }
-
-    inorden(temp) {
-        if (temp != null) {
-            this.inorden(temp.izq)
-            console.log(temp.obj.id)
-            this.inorden(temp.der)
-        }
-    }
-
-    postorden(temp) {
-        if (temp != null) {
-            this.postorden(temp.izq)
-            this.postorden(temp.der)
-            console.log(temp.obj.id)
-        }
-    }
-
-    genDot() {
-        let cadena = "digraph abb {\n"
-        cadena += this.genNodos(this.raiz)
-        cadena += "\n" + this.enlazar(this.raiz)
-        cadena += '}'
-
-        console.log(cadena)
-    }
-
-    genNodos(raiz_actual) {
-        let nodos = ""
+    preorden(raiz_actual) {
         if (raiz_actual != null) {
-            nodos += "n" + raiz_actual.obj.id + "[label = \"" + raiz_actual.obj.id + "\"]\n"
-            nodos += this.genNodos(raiz_actual.izq)
-            nodos += this.genNodos(raiz_actual.der)
+            console.log(raiz_actual.obj);
+            this.preorden(raiz_actual.izq);
+            this.preorden(raiz_actual.der);
         }
-        return nodos
+    }
+
+    inOrden(raiz_actual) {
+        if (raiz_actual != null) {
+            this.inOrden(raiz_actual.izq);
+            console.log(raiz_actual.obj.id);
+           // console.log("altura= " + (this.altura(raiz_actual.der) - this.altura(raiz_actual.iz)))
+            this.inOrden(raiz_actual.der);
+        }
+    }
+
+    postOrden(raiz_actual) {
+        if (raiz_actual != null) {
+            this.postOrden(raiz_actual.izq);
+            this.postOrden(raiz_actual.der);
+            console.log(raiz_actual.obj.id);
+        }
+    }
+
+    generarDot() {
+        let cadena = "digraph arbol {\n";
+        cadena += this.generar_nodos(this.raiz);
+        cadena += "\n";
+        cadena += this.enlazar(this.raiz);
+        cadena += "\n}";
+
+        console.log(cadena);
+        return cadena
+    }
+
+    generar_nodos(raiz_actual) { //metodo preorden
+        let nodos = "";
+        if (raiz_actual != null) {
+            nodos += "n" + raiz_actual.obj.id + "[label=\"" + raiz_actual.obj.id + "\"]\n";
+            nodos += this.generar_nodos(raiz_actual.izq);
+            nodos += this.generar_nodos(raiz_actual.der);
+        }
+        return nodos;
     }
 
     enlazar(raiz_actual) {
-        let cadena = ''
+        let cadena = "";
         if (raiz_actual != null) {
-            cadena += this.enlazar(raiz_actual.izq)
+            cadena += this.enlazar(raiz_actual.izq);
+            cadena += this.enlazar(raiz_actual.der);
+            //validaciones
             if (raiz_actual.izq != null) {
-                cadena += 'n' + raiz_actual.obj.id + '-> n' + raiz_actual.izq.obj.id + '\n'
+                cadena += "n" + raiz_actual.obj.id + "-> n" + raiz_actual.izq.obj.id + "\n";
             }
             if (raiz_actual.der != null) {
-                cadena += 'n' + raiz_actual.obj.id + '-> n' + raiz_actual.der.obj.id + '\n'
+                cadena += "n" + raiz_actual.obj.id + "-> n" + raiz_actual.der.obj.id + "\n";
             }
-            cadena += this.enlazar(raiz_actual.der)
-        }
-        return cadena
 
+
+        }
+        return cadena;
     }
 }
 
@@ -186,13 +197,13 @@ class Empleado {
 
 }
 
-/* let empleado1 = new Empleado(25,"dsd","dsd","dsd","dsd","dsd")
-let empleado2 = new Empleado(10,"dsd","dsd","dsd","dsd","dsd")
-let empleado3 = new Empleado(5,"dsd","dsd","dsd","dsd","dsd")
+/* let empleado1 = new Empleado(1,"dsd","dsd","dsd","dsd","dsd")
+let empleado2 = new Empleado(2,"dsd","dsd","dsd","dsd","dsd")
+let empleado3 = new Empleado(3,"dsd","dsd","dsd","dsd","dsd")
 let empleado4 = new Empleado(20,"dsd","dsd","dsd","dsd","dsd")
 let empleado5 = new Empleado(35,"dsd","dsd","dsd","dsd","dsd")
 let empleado6 = new Empleado(30,"dsd","dsd","dsd","dsd","dsd")
-let empleado7 = new Empleado(40,"dsd","dsd","dsd","dsd","dsd")
+let empleado7 = new Empleado(25,"dsd","dsd","dsd","dsd","dsd")
 let avl = new AVL()
 avl.insertar(empleado1)
 avl.insertar(empleado2)
@@ -207,7 +218,7 @@ avl.inorden(avl.raiz)
 console.log()
 avl.postorden(avl.raiz)
 
-avl.genDot() */
+avl.generarDot() */
 
 
 
@@ -220,34 +231,39 @@ function add_empleado() {
     let email = document.getElementById('correo').value
     let pass = document.getElementById('pass').value
 
-    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
+
+
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
     var avl = new AVL()
     guardado_temp = CircularJSON.parse(guardado_temp)
     Object.assign(avl, guardado_temp)
 
-    if(avl.raiz == null){
+
+
+
+    if (avl.raiz == null) {
         let nuevo_avl = new AVL()
-        let empleado = new Empleado(id, nombre, edad, email, pass)
+        let empleado = new Empleado(Number(id), nombre, edad, email, pass)
         nuevo_avl.insertar(empleado)
         let avl_temp = CircularJSON.stringify(nuevo_avl)
         localStorage.setItem('datos', JSON.stringify(avl_temp))
 
         console.log('lista de IDs Avl')
-        nuevo_avl.inorden(nuevo_avl.raiz)
-    }else{
+        nuevo_avl.inOrden(nuevo_avl.raiz)
+    } else {
         //validar si el empleado no se repite
-        let empleado = new Empleado(id, nombre, edad, email, pass)
+        let empleado = new Empleado(Number(id), nombre, edad, email, pass)
         avl.insertar(empleado)
 
         let avl_temp = CircularJSON.stringify(avl)
         localStorage.setItem('datos', JSON.stringify(avl_temp))
         //avl.genDot()
-        console.log('lista de IDs Avl')
-        avl.inorden(avl.raiz)
+        console.log('lista de IDs Avl else')
+        avl.inOrden(avl.raiz)
     }
 }
 
-function back(){
+function back() {
     window.open("admin_empleados.html", "_self")
 }
 
@@ -257,51 +273,51 @@ function verificar() {
     let id = document.getElementById('id').value
     let pass = document.getElementById('pass').value
 
-    if (tcombo == 'admin'){
-        if(id == 'Admin' && pass == '1234'){
+    if (tcombo == 'admin') {
+        if (id == 'Admin' && pass == '1234') {
             window.open("admin_empleados.html", "_self")
-        }else{
-            alert('Credenciales de administrador incorrectas')           
+        } else {
+            alert('Credenciales de administrador incorrectas')
         }
-    }else{
+    } else {
         console.log('selecciono el empleado')
-        validar_emplado(id,pass)
+        validar_emplado(id, pass)
     }
 }
 
-function validar_emplado(id,pass){
-    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
+function validar_emplado(id, pass) {
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
     var avl = new AVL()
     guardado_temp = CircularJSON.parse(guardado_temp)
     Object.assign(avl, guardado_temp)
     console.log(avl)
-    if(avl.raiz == null){
+    if (avl.raiz == null) {
         alert('Sin usuarios')
-    }else{
+    } else {
         console.log('revisar')
-        recorreIn(avl.raiz,id,pass)
+        recorreIn(avl.raiz, id, pass)
     }
 }
 
-function recorreIn(temp,id,pass){
-     
-    if (temp != null){     
-        this.recorreIn(temp.izq,id,pass)
-        if(temp.obj.id == id && temp.obj.password == pass){
+function recorreIn(temp, id, pass) {
+
+    if (temp != null) {
+        this.recorreIn(temp.izq, id, pass)
+        if (temp.obj.id == id && temp.obj.password == pass) {
             console.log('lo encontro xd')
             window.open("empleado_cliente.html", "_self")
             let nId = temp.obj.id
             let nPass = temp.obj.password
             localStorage.setItem('claveID', nId)
-            localStorage.setItem('clavePass',nPass)
-            
+            localStorage.setItem('clavePass', nPass)
+
         }
-        this.recorreIn(temp.der,id,pass)       
+        this.recorreIn(temp.der, id, pass)
     }
-    
+
 }
 
-function salir(){
+function salir() {
     window.open("login.html", "_self")
 }
 
@@ -311,40 +327,99 @@ function salir(){
 let combo = document.getElementById("combobox")
 let elementos = "<option> Seleccione Empleado </option>"
 
-function inordenT(temp){
+function inordenT(temp) {
 
     if (temp != null) {
         this.inordenT(temp.izq)
-        elementos += "<option id='"+temp.obj.id+"'>"+temp.obj.id+"</option>"
+        elementos += "<option id='" + temp.obj.id + "'>" + temp.obj.id + "</option>"
         combo.innerHTML = elementos
         console.log(combo.innerHTML)
         this.inordenT(temp.der)
     }
 }
 
-document.getElementById("fichero").addEventListener("change", function() {
+function avlg() {
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+    var avl = new AVL()
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
+    cadena = avl.generarDot()
+    console.log("el avl", cadena)
+
+    var container = document.getElementById("mynetwork");
+    var DOTstring = cadena
+    var parsedData = vis.parseDOTNetwork(DOTstring);
+
+    var data = {
+        nodes: parsedData.nodes,
+        edges: parsedData.edges
+    }
+    var options = {
+        nodes: {
+            widthConstraint: 20,
+        },
+        layout: {
+            hierarchical: {
+                levelSeparation: 100,
+                nodeSpacing: 100,
+                parentCentralization: true,
+                direction: 'UD',        // UD, DU, LR, RL
+                sortMethod: 'directed',  // hubsize, directed
+                shakeTowards: 'roots'  // roots, leaves                        
+            },
+        },
+    };
+    var network = new vis.Network(container, data, options);
+
+}
+
+document.getElementById("fichero").addEventListener("change", function () {
     var file_to_read = document.getElementById("fichero").files[0];
     var fileread = new FileReader();
-    fileread.onload = function(e) {
-      var content = e.target.result;
-      var intern = JSON.parse(content); // parse json 
-      console.log(intern.vendedores[0]["id"]); // You can index every object
+    fileread.onload = function (e) {
+        var content = e.target.result;
+        var intern = JSON.parse(content); // parse json 
+
+        
+        for (x of intern.vendedores) {
+            var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+            var avl = new AVL()
+            guardado_temp = CircularJSON.parse(guardado_temp)
+            Object.assign(avl, guardado_temp)
+
+
+            if (avl.raiz == null) {
+                let nuevo_avl = new AVL()
+                let empleado = new Empleado(x.id, x.nombre, x.edad, x.correo, x.password)
+                nuevo_avl.insertar(empleado)
+
+                let avl_temp = CircularJSON.stringify(nuevo_avl)
+                localStorage.setItem('datos', JSON.stringify(avl_temp))
+            } else {
+                let empleado = new Empleado(x.id, x.nombre, x.edad, x.correo, x.password)
+                avl.insertar(empleado)
+
+                let avl_temp = CircularJSON.stringify(avl)
+                localStorage.setItem('datos', JSON.stringify(avl_temp))
+            }
+
+        }
+        
     };
     fileread.readAsText(file_to_read);
-  });
+});
 
 
-function mostrarAVL(){
+function mostrarAVL() {
     console.log("para txbox")
-    var guardado_temp = JSON.parse(localStorage.getItem('datos')) 
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
     var avl = new AVL()
     guardado_temp = CircularJSON.parse(guardado_temp)
     Object.assign(avl, guardado_temp)
     inordenT(avl.raiz)
-    
-    
+
+
 }
 
 
 
-mostrarAVL()
