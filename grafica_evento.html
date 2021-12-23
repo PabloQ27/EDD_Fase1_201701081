@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>Grafica evento</title>    
+   <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
+    
+</head>
+<body>
+    <button onclick="buscarEvento()">mostrars</button>
+    <div id = "mynetwork"></div>
+    <textarea id = "textarea" name="mensaje" placeholder="Comparte tu opinión con el autor!"></textarea>
+    <input type="checkbox" class="checkbox" id="check">
+    <label class="menu" for="check">|||</label>
+    <div class="left-panel">
+        <ul>  
+            <a href="empleado_cliente"><li>Cliente</li></a>       
+            <a href="empleado_evento.html"><li>Evento</li></a>
+        
+            <button class ='botons' onclick="salir()" >Cerrar sesión</button>    
+            </ul>
+    </div>
+<script src="js/vis-network.min.js"></script>    
+<script src="js/circular-json.js"></script>
+<script src="js/empleado.js"></script>
+<script src="js/cliente.js"></script>
+<script src="js/calendario.js"></script>
+</body>
+
+
+
+</html>

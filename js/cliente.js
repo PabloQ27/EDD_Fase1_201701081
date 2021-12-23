@@ -77,7 +77,7 @@ function add_cliente() {
     let nombre = document.getElementById('nombre').value
     let correo = document.getElementById('correo').value
     buscarid(avl.raiz, idTemp, id, nombre, correo, avl)
-    
+
 
     var guardado_temp = JSON.parse(localStorage.getItem('datos'))
     var avl = new AVL()
@@ -108,7 +108,7 @@ function buscarid(temp, id, id2, nombre, correo, avl) {
 
 function agregarListaCliente(lista, cliente) {
     if (lista == null) {
-        let nuevalista = new Lista_Cliente()    
+        let nuevalista = new Lista_Cliente()
         nuevalista.insert(cliente)
         lista = nuevalista
         return lista
@@ -118,10 +118,10 @@ function agregarListaCliente(lista, cliente) {
     }
 }
 
-function cambio(listavieja, cliente){
+function cambio(listavieja, cliente) {
     let temp = listavieja.cabeza
     let listanueva = new Lista_Cliente()
-    while(temp != null){
+    while (temp != null) {
         listanueva.insert(temp.obj)
         temp = temp.siguiente
     }
@@ -129,6 +129,116 @@ function cambio(listavieja, cliente){
     return listanueva
 }
 
+function buscarid2() {
 
-//el id lo da el json al igual que el id2 solo hay que recuperar el avl para la carga masiva la cluea
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+    var avl = new AVL()
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
+    console.log(avl)
+
+    idTemp = localStorage.getItem("claveID")
+    enorden(avl.raiz, idTemp)
+
+}
+
+function enorden(temp, id) {
+    if (temp != null) {
+        enorden(temp.izq, id)
+        if (temp.obj.id == id) {
+            genDot(temp.obj.listaClientes, temp.obj.listaClientes)
+
+        }
+        enorden(temp.der, id)
+    }
+}
+
+function genDot(temp, temp2) {
+    let cadena = "digraph lista{"
+    temp = temp.cabeza
+    let i = 1
+    let j = 1
+    while (temp != null) {
+        j = i + 1
+        cadena += "Columna" + String(i) + "[label = \"" + temp.obj.nombre + "\"]\n"
+        i++
+        temp = temp.siguiente
+    }
+    console.log(cadena)
+    temp2 = temp2.cabeza
+    i = 1
+    while (temp2 != null) {
+        if (temp2.siguiente === null) {
+            break
+        }
+        j = i + 1
+        cadena += "Columna" + String(i) + "->Columna" + String(j) + ";\n"
+        temp2 = temp2.siguiente
+        i++
+    }
+    cadena += "}"
+    console.log(cadena)
+
+    var container = document.getElementById("mynetwork");
+    var DOTstring = cadena
+    var parsedData = vis.parseDOTNetwork(DOTstring);
+
+    var data = {
+        nodes: parsedData.nodes,
+        edges: parsedData.edges
+    }
+    var options = {
+        nodes: {
+            widthConstraint: 100,//ancho del nodo
+        },
+        layout: {
+            hierarchical: {
+                levelSeparation: 150,
+                nodeSpacing: 100,
+                parentCentralization: true,
+                direction: 'LR',        // UD, DU, LR, RL
+                sortMethod: 'directed',  // hubsize, directed
+                shakeTowards: 'roots'  // roots, leaves                        
+            },
+        },
+    };
+    var network = new vis.Network(container, data, options);
+}
+
+document.getElementById("fichero_cliente").addEventListener("change", function () {
+    var file_to_read = document.getElementById("fichero_cliente").files[0];
+    var fileread = new FileReader();
+    fileread.onload = function (e) {
+        var content = e.target.result;
+        var intern = JSON.parse(content);
+        console.log(intern.vendedores)
+
+        for (x of intern.vendedores) {
+            var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+            var avl = new AVL()
+            guardado_temp = CircularJSON.parse(guardado_temp)
+            Object.assign(avl, guardado_temp)
+
+            console.log("id del empleado: ", x.id)
+
+            for (z of x.clientes) {
+                buscarid(avl.raiz, x.id, z.id, z.nombre, z.correo, avl)
+
+                console.log("id de client: ", z.id)
+                //guardar avl
+            }
+        }
+
+        var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+        var avl = new AVL()
+        guardado_temp = CircularJSON.parse(guardado_temp)
+        Object.assign(avl, guardado_temp)
+        console.log("avl despues de guardar clientes")
+        console.log(avl)
+
+    };
+    fileread.readAsText(file_to_read);
+});
+
+//el id lo da el json, que el id2 solo hay que recuperar el avl para la carga masiva la cluea
 //sera con doble for
