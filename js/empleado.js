@@ -318,7 +318,7 @@ function recorreIn(temp, id, pass) {
 }
 
 function salir() {
-    window.open("login.html", "_self")
+    window.open("index.html", "_self")
 }
 
 
