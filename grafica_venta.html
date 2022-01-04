@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Grafica de Ventas</title>    
+   <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
+    
+</head>
+<body>
+    <button onclick="tabla_hash()">mostrar</button>
+    <div id = "mynetwork"></div>
+    <input type="checkbox" class="checkbox" id="check">
+    <label class="menu" for="check">|||</label>
+    
+    <div class="left-panel">
+        <ul>  
+            <a href="admin_empleados.html"><li>Empleados</li></a>  
+            <a href="admin_proveedores.html"><li>Proveedores</li></a>    
+            <a href="carga_eventos.html"><li>Cargar Calendario</li></a>
+            <a href="form_cliente.html"><li>Cargar Clientes</li></a>  
+            <a href="form_producto.html"><li>Cargar Productos</li></a>  
+            <a href="form_venta.html"><li>Cargar Ventas</li></a>  
+            <a href="carga_rutas.html"><li>Cargar Rutas</li></a> 
+
+        <button onclick="salir()" class ='botons' >Cerrar sesión</button>    
+        </ul>
+    </div>
+
+    <script src="js/vis-network.min.js"></script>    
+    <script src="js/circular-json.js"></script>
+    <script src="js/venta.js"></script>
+
+</body>
+
+
+
+</html>

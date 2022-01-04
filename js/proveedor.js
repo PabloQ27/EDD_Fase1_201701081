@@ -182,6 +182,7 @@ function back() {
 
 
 console.log("paso")
+
 function bst() {
     var guardado_temp = JSON.parse(localStorage.getItem('datos2'))
     var abb = new Abb()

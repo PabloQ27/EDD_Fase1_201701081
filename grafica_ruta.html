@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>Grafica de Rutas</title>    
+   <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
+    
+</head>
+<body>
+    <button onclick="grafo1()">mostrar</button>
+    <div id = "mynetwork"></div>
+    <input type="checkbox" class="checkbox" id="check">
+    <label class="menu" for="check">|||</label>
+    
+    <div class="left-panel">
+        <ul>  
+        <a href="admin_empleados.html"><li>Empleados</li></a>  
+        <a href="admin_proveedores.html"><li>Proveedores</li></a>    
+        <a href=""><li>Cargar Calendario</li></a>
+        <a href=""><li>Cargar Clientes</li></a>  
+        <a ><li>Cargar Ventas</li></a>  
+
+        <button onclick="salir()" class ='botons' >Cerrar sesión</button>    
+        </ul>
+    </div>
+
+    <script src="js/vis-network.min.js"></script>    
+    <script src="js/ruta.js"></script>
+
+</body>
+
+
+
+</html>
