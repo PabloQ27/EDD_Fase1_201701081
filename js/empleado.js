@@ -1,3 +1,21 @@
+
+class bloque {
+    constructor(indice, data, previusHash) {
+        this.indice = indice;
+        this.data = data;
+        this.fecha = Date.now();
+        this.previusHash = previusHash;
+        this.hash = this.crearHash();
+        this.nonce = 0;
+
+        this.prueba_de_trabajo(3);
+    }
+    crearHash() {
+        sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(padre.objeto.usuario))
+        return crypto.createHash('sha256').update(this.indice + this.data + this.fecha + this.previusHash + this.nonce).digest('hex');
+    }
+}
+
 class nodoAVL {
     constructor(obj) {
         this.obj = obj;
@@ -29,13 +47,13 @@ class AVL {
                 //validaciones
 
                 if (this.altura(raiz_actual.der) - this.altura(raiz_actual.izq) == -2) {
-                   // console.log("entra a rotacion IZQUIERDA");
+                    // console.log("entra a rotacion IZQUIERDA");
                     //if(this.altura(raiz_actual.izq.der)-this.altura(raiz_actual.izq.izq))
                     if (nuevo.obj.id < raiz_actual.izq.obj.id) { //-1 ROTACION IZQUIERDA
-                      //  console.log("entra a rotacion IZQUIERDA IZQUIERDA");
+                        //  console.log("entra a rotacion IZQUIERDA IZQUIERDA");
                         raiz_actual = this.r_izquierda(raiz_actual);
                     } else { //1 ROTACION IZQ-DERECHA
-                      //  console.log("entra a rotacion IZQUIERDA DERECHA");
+                        //  console.log("entra a rotacion IZQUIERDA DERECHA");
                         raiz_actual = this.r_izq_der(raiz_actual);
                     }
                 }
@@ -43,12 +61,12 @@ class AVL {
                 raiz_actual.der = this.insertar_nodo(raiz_actual.der, nuevo);
                 //validaciones
                 if (this.altura(raiz_actual.der) - this.altura(raiz_actual.izq) == 2) {
-                 //   console.log("entra a rotacion DERECHA");
+                    //   console.log("entra a rotacion DERECHA");
                     if (nuevo.obj.id > raiz_actual.der.obj.id) { // 1 ROTACION DERECHA
-                       // console.log("entra a rotacion DERECHA DERECHA");
+                        // console.log("entra a rotacion DERECHA DERECHA");
                         raiz_actual = this.r_derecha(raiz_actual);
                     } else {//-1 ROTACION DERECHA IZQUIERDA
-                      //  console.log("entra a rotacion DERECHA IZQUIERDA");
+                        //  console.log("entra a rotacion DERECHA IZQUIERDA");
                         raiz_actual = this.r_der_izq(raiz_actual);
                     }
                 }
@@ -129,7 +147,7 @@ class AVL {
         if (raiz_actual != null) {
             this.inOrden(raiz_actual.izq);
             console.log(raiz_actual.obj.id);
-           // console.log("altura= " + (this.altura(raiz_actual.der) - this.altura(raiz_actual.iz)))
+            // console.log("altura= " + (this.altura(raiz_actual.der) - this.altura(raiz_actual.iz)))
             this.inOrden(raiz_actual.der);
         }
     }
@@ -224,6 +242,28 @@ avl.generarDot() */
 
 // METODOS PARA HTML form_empleado
 
+function encriptados() {
+    var guardado_temp = JSON.parse(localStorage.getItem('datos'))
+    var avl = new AVL()
+    guardado_temp = CircularJSON.parse(guardado_temp)
+    Object.assign(avl, guardado_temp)
+    cadena = ""
+    inOrden2(avl.raiz)
+    document.getElementById("textarea").innerHTML = cadena
+}
+
+let cadena = ""
+function inOrden2(raiz_actual) {
+    if (raiz_actual != null) {
+        this.inOrden2(raiz_actual.izq);
+      //  console.log(raiz_actual.obj.id, raiz_actual.obj.correo, raiz_actual.obj.password);
+        cadena += "ID: "+raiz_actual.obj.id +"\t\t\t\t\tID encript: "+sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(raiz_actual.obj.id))+ "\nCorreo:" + raiz_actual.obj.correo + "\t\t\tCorreo encript: "+sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(raiz_actual.obj.correo))+"  \nPassword: "+raiz_actual.obj.password + "\t\t\tPassword encript: "+sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(raiz_actual.obj.password))+"\n\n\n"
+        this.inOrden2(raiz_actual.der);
+    }
+
+}
+
+
 function add_empleado() {
     let id = document.getElementById('id').value
     let nombre = document.getElementById('nombre').value
@@ -269,6 +309,7 @@ function back() {
 
 //  METODO PARA EL LOGIN
 function verificar() {
+    
     let tcombo = document.getElementById('textb').value
     let id = document.getElementById('id').value
     let pass = document.getElementById('pass').value
@@ -310,12 +351,15 @@ function recorreIn(temp, id, pass) {
             let nPass = temp.obj.password
             localStorage.setItem('claveID', nId)
             localStorage.setItem('clavePass', nPass)
+            localStorage.setItem("nombre",temp.obj.nombre)
 
         }
         this.recorreIn(temp.der, id, pass)
     }
 
 }
+
+
 
 function salir() {
     window.open("index.html", "_self")
@@ -380,7 +424,7 @@ document.getElementById("fichero").addEventListener("change", function () {
         var content = e.target.result;
         var intern = JSON.parse(content); // parse json 
 
-        
+
         for (x of intern.vendedores) {
             var guardado_temp = JSON.parse(localStorage.getItem('datos'))
             var avl = new AVL()
@@ -404,7 +448,7 @@ document.getElementById("fichero").addEventListener("change", function () {
             }
 
         }
-        
+
     };
     fileread.readAsText(file_to_read);
 });

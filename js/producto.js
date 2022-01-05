@@ -1,4 +1,4 @@
-class Producto {
+class Producto {//objeto el cual contendra la informacion para cada nodo de las paginas
     constructor(id, nombre, precio, cantidad) {
         this.id = id
         this.nombre = nombre
@@ -26,7 +26,7 @@ class lista_nodoB {
         this.size = 0;
     }
 
-    insertar(nuevo) {
+    insertar(nuevo) {//recibe el obj que se insertara en el arbol
         if (this.primero == null) {
             this.primero = nuevo;
             this.ultimo = nuevo;
@@ -454,7 +454,7 @@ lista.add(producto5)
 lista.add(producto4)
 lista.ver() */
 
-let arbol = new Arbol_B()
+//let arbol = new Arbol_B()
 
 /* let p1 = new Producto(5, 'produc1', 150.75, 75)
 let p2 = new Producto(1,  'produc1', 150.75, 75)
@@ -579,7 +579,7 @@ function vistagrafica() {
     window.open("grafica_producto.html", "_self")
 }
 
-//sjcl.codec.hex.fromBits(sjcl.hash.sha256.hash(padre.objeto.usuario))
+
 document.getElementById("fichero_producto").addEventListener("change", function () {
     var file_to_read = document.getElementById("fichero_producto").files[0];
     var fileread = new FileReader();

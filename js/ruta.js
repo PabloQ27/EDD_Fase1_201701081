@@ -1,5 +1,5 @@
 
-class nodo {
+class nodo {//objeto que recibira la informacion para cada nodo
     constructor(id, nombre) {
         this.id = id;
         this.nombre = nombre
@@ -11,12 +11,12 @@ class nodo {
 }
 
 class lista_adyasentes {
-    constructor() {
+    constructor() {//lista que contrand los nodos
         this.primero = null;
         this.ultimo = null;
     }
 
-    insertar(id, p) {
+    insertar(id, p) {//llevar la ponderacion que habra entre cada nodo
         let nuevo = new nodo(id);
         nuevo.ponderacion = p;
         if (this.primero == null) {
@@ -42,10 +42,10 @@ class grafo {
         this.ultimo = null;
     }
 
-    insertar(id, nombre) {
+    insertar(id, nombre) {//se insertara la informacion para los nodos
         let nuevo = new nodo(id, nombre);
 
-        if (this.primero == null) {
+        if (this.primero == null) {//si el grafo esta vacio
             this.primero = nuevo;
             this.ultimo = nuevo;
         } else {
@@ -114,7 +114,7 @@ class grafo {
             aux = aux.siguiente;
         }
         cadena += "}"
-    
+
         return cadena
     }
 }
@@ -166,7 +166,8 @@ function vistagrafo() {
 function grafo1() {
     console.log("grafica xd")
     let cadena = localStorage.getItem("grafo")
-    console.log(cadena)
+   // console.log(cadena)
+    document.getElementById("textarea").innerHTML = cadena
 
     var container = document.getElementById("mynetwork");
     var DOTstring = cadena
@@ -180,29 +181,32 @@ function grafo1() {
         nodes: {
             widthConstraint: 110,
         },
+        
         layout: {
             hierarchical: {
-                levelSeparation: 100,
-                nodeSpacing: 100,
-               parentCentralization: true,
-                direction: 'LR',        // UD, DU, LR, RL
-                sortMethod: 'hubsize',  // hubsize, directed
+                enabled: false,
+                levelSeparation: 200,
+                nodeSpacing: 1000,
+                parentCentralization: true,
+                direction: 'UD',        // UD, DU, LR, RL
+                sortMethod: 'directed',  // hubsize, directed
                 shakeTowards: 'roots'  // roots, leaves                        
             },
+            
         },
-        /* physics: {
+        physics: {
             enabled: true,
             hierarchicalRepulsion: {
-                centralGravity: 0.0,
-                springLength: 500,
-                springConstant: 0.01,
-                nodeDistance: 500,
-                damping: 0.09
+              // centralGravity: 0.0,
+                springLength: 300,
+               // springConstant: 0.01,
+                nodeDistance: 70,
+                damping: 1
             },
             solver: 'hierarchicalRepulsion'
-        } */
+        }
     };
-    var network = new vis.Network(container, data, options);
+    var network = new vis.Network(container, parsedData,options);
 }
 
 document.getElementById("fichero_rutas").addEventListener("change", function () {
@@ -229,7 +233,7 @@ document.getElementById("fichero_rutas").addEventListener("change", function () 
             for (z of x.adyacentes) {
                 console.log(z.id)
                 ruta.agregar_adyacente(x.id, z.id, z.distancia)
-               // ruta.agregar_adyacente(z.id, x.id, z.distancia)
+                // ruta.agregar_adyacente(z.id, x.id, z.distancia)
             }
         }
 

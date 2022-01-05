@@ -1,4 +1,4 @@
-class Venta {
+class Venta {//el objeto que contendra toda la informacion de la tabla
     constructor(id_venta, nombre1, nombre2, total, lista) {
         this.id_venta = id_venta
         this.nombre1 = nombre1
@@ -17,12 +17,12 @@ class nodo {
 
 class hash {
     constructor() {
-        this.claves = this.iniciar_arreglo(7);
-        this.claves_usadas = 0;
+        this.claves = this.iniciar_arreglo(7);//iniciar el tamaño de del arreglo para la tabla hash
+        this.claves_usadas = 0; //inicia el uso de claves
         this.size = 7;
     }
 
-    iniciar_arreglo(tamaño) {
+    iniciar_arreglo(tamaño) {//recibe el tamaño para iniciar el arreglo
         let claves = [];
         for (var i = 0; i < tamaño, i++;) {
             claves[i] = null;
@@ -30,8 +30,7 @@ class hash {
         return claves;
     }
 
-    calcular_hash(dato) {
-        //metodo de division
+    calcular_hash(dato) {//metodo de division
         let resultado = 0;
         resultado = dato % this.size;
         return resultado;
@@ -109,6 +108,16 @@ class hash {
         }
     }
 
+    recorrer2(nombre) {
+        for (var i = 0; i < this.size; i++) {
+            if (this.claves[i] != null && this.claves[i].nombre1 == nombre) {
+                console.log("ID" + this.claves[i].id_venta);
+                let cadena = "ID de ventea:"+ this.claves[i].id_venta + "\tNombre de cliente: "+this.claves[i].nombre2+"\tTotal de venta: Q."+this.claves[i].total+ this.info_lista(this.claves[i].lista)
+                return cadena
+            }
+        }
+    }
+
     recorrer() {
         for (var i = 0; i < this.size; i++) {
             if (this.claves[i] != null) {
@@ -119,12 +128,20 @@ class hash {
         }
     }
 
+    info_lista(lista) {
+        let cadena = ""
+        cadena += "\n\nDetalles de la venta:\n"
+        for (let x = 0; x < lista.length; x++) {
+            cadena += "ID de producto:"+lista[x].id + "\tNombre: " + lista[x].nombre + "   \tPrecio: Q" + lista[x].precio + "  \tCantidad: " + lista[x].cantidad + "\n"
+        }
+        return cadena
+    }
     graficar() {
         //hace los nodos
         let cadena = "digraph tabla {\n"
         for (var i = 0; i < this.size; i++) {
             if (this.claves[i] != null) {
-                cadena += i + "[label = \"" + "ID: "+this.claves[i].id_venta+"\\nVendedor " +this.claves[i].nombre1+"\\nCliente: "+this.claves[i].nombre2+"\\nTotal: Q."+this.claves[i].total+ "\"]\n"
+                cadena += i + "[label = \"" + "ID: " + this.claves[i].id_venta + "\\nVendedor " + this.claves[i].nombre1 + "\\nCliente: " + this.claves[i].nombre2 + "\\nTotal: Q." + this.claves[i].total + "\"]\n"
                 cadena += this.graficar_lista1(this.claves[i].lista, this.claves[i].id_venta)
             } else {
                 cadena += i + "[label =\"\\n vacio \\n \\n \"]\n"
@@ -137,12 +154,12 @@ class hash {
             if (this.claves[i] != null) {
                 cadena += i + "->\n"
                 cadena += this.graficar_lista2(this.claves[i].lista, this.claves[i].id_venta)
-               // cadena += i + "->\n"
+                // cadena += i + "->\n"
             }
 
 
         }
-       // cadena += i
+        // cadena += i
         cadena += "\n}"
         return cadena
     }
@@ -150,7 +167,7 @@ class hash {
     graficar_lista1(lista, id) {
         let cadena = ""
         for (let x = 0; x < lista.length; x++) {
-            cadena += String(id) + lista[x].id + "[label = \"" + "ID: "+lista[x].id +"\\nNombre: "+lista[x].nombre+ "\\nPrecio: Q"+lista[x].precio+"\\nCantidad: "+lista[x].cantidad+"\"]\n"
+            cadena += String(id) + lista[x].id + "[label = \"" + "ID: " + lista[x].id + "\\nNombre: " + lista[x].nombre + "\\nPrecio: Q" + lista[x].precio + "\\nCantidad: " + lista[x].cantidad + "\"]\n"
         }
         return cadena
     }
@@ -206,6 +223,22 @@ tabla.insertar(new nodo(112));
 tabla.insertar(new nodo(190)); */
 //tabla.recorrer();
 
+
+function venta() {
+    
+    let temp = JSON.parse(localStorage.getItem("ventas"))
+    nombre = localStorage.getItem("nombre")
+    console.log("hola",nombre)
+
+    let tabla = new hash()
+    Object.assign(tabla, temp)
+    
+    let cadena = tabla.recorrer2(nombre)
+    
+
+    document.getElementById("textarea").innerHTML = cadena
+}
+
 function add_venta() {
     let id = document.getElementById("id").value
     let nombre1 = document.getElementById("nombre1").value
@@ -230,6 +263,9 @@ function calcular(id, n1, n2, id2, cantidad, lista) {
 function back() {
     window.open("admin_empleados.html", "_self")
 }
+function salir(){
+    window.open("index.html", "_self")
+}
 
 function vistagrafica() {
     window.open("grafica_venta.html", "_self")
@@ -240,10 +276,10 @@ function tabla_hash() {
     let temp = JSON.parse(localStorage.getItem("ventas"))
     let tabla = new hash()
     Object.assign(tabla, temp)
-    
+
     cadena = tabla.graficar()
     tabla.recorrer()
-   // console.log(cadena)
+    // console.log(cadena)
 
     var container = document.getElementById("mynetwork");
     var DOTstring = cadena

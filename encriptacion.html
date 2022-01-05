@@ -1,11 +1,11 @@
 <html>
 <head>
-<title>Grafica de Rutas</title>    
+<title>Grafica de Productos</title>    
    <link rel="stylesheet" type="text/css" href="css/estilos.css"> 
     
 </head>
 <body>
-    <button onclick="grafo1()">mostrar</button>
+    <button onclick="encriptados()">mostrar</button>
     <div id = "mynetwork"></div>
     <input type="checkbox" class="checkbox" id="check">
     <label class="menu" for="check">|||</label>
@@ -18,14 +18,16 @@
             <a href="form_cliente.html"><li>Cargar Clientes</li></a>  
             <a href="form_producto.html"><li>Cargar Productos</li></a>  
             <a href="form_venta.html"><li>Cargar Ventas</li></a>  
-            <a href="carga_rutas.html"><li>Cargar Rutas</li></a>  
+            <a href="carga_rutas.html"><li>Cargar Rutas</li></a> 
 
         <button onclick="salir()" class ='botons' >Cerrar sesión</button>    
         </ul>
     </div>
-    <textarea cols="180" rows="30" id = "textarea" name="mensaje" placeholder="Comparte tu opinión con el autor!"></textarea>
+    <textarea cols="180" rows="40" id = "textarea" name="mensaje" placeholder="Comparte tu opinión con el autor!"></textarea>
+    <script src="js/sjcl.js"></script>
     <script src="js/vis-network.min.js"></script>    
-    <script src="js/ruta.js"></script>
+    <script src="js/circular-json.js"></script>
+    <script src="js/empleado.js"></script>
 
 </body>
 
